@@ -9,6 +9,17 @@ export const registerUser = async (req, res) => {
         return res.status(400).json({ error: 'Username, email, and password are required' });
     }
 
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        return res.status(400).json({ error: 'Invalid email format' });
+    }
+
+    // Basic password validation (minimum 6 characters)
+    if (password.length < 6) {
+        return res.status(400).json({ error: 'Password must be at least 6 characters long' });
+    }
+
     try {
         // Hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
